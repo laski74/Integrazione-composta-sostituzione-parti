@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrali di Funzioni Composte - Lezione Interattiva</title>
+    
+    <!-- MathJax per le formule matematiche -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 3px solid #667eea;
+            overflow-x: auto;
+        }
+        
+        .tab-button {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+        
+        .tab-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .formula-box {
+            background: #1e1e1e;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            border: 3px solid #00ff00;
+            overflow-x: auto;
+        }
+        
+        .example-box {
+            background: #e8f5e9;
+            border: 3px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .example-box h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: #fff3e0;
+            border: 3px solid #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+        
+        .error-box {
+            background: #ffebee;
+            border: 3px solid #f44336;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .error-box h4 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+        
+        .toggle-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+        
+        .toggle-button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+        
+        .toggle-button:active {
+            transform: scale(0.95);
+        }
+        
+        .hidden-content {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px dashed #667eea;
+        }
+        
+        .hidden-content.show {
+            display: block;
+            animation: slideDown 0.4s;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 2000px; }
+        }
+        
+        .exercise {
+            background: #e3f2fd;
+            border: 3px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h4 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+        
+        .solution-space {
+            background: white;
+            border: 2px dashed #999;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 100px;
+        }
+        
+        .step {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .tip-box {
+            background: #e1bee7;
+            border: 3px solid #9c27b0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tip-box h4 {
+            color: #6a1b9a;
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        th, td {
+            border: 2px solid #667eea;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+        
+        .interactive-area {
+            background: #fff9c4;
+            border: 3px solid #fbc02d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f5f5f5;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .checklist li:hover {
+            background: #e0e0e0;
+            transform: translateX(5px);
+        }
+        
+        .checklist input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50 0%, #8bc34a 100%);
+            width: 0%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .tabs, .toggle-button {
+                display: none;
+            }
+            .tab-content {
+                display: block !important;
+            }
+            .hidden-content {
+                display: block !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .tab-button {
+                font-size: 0.9rem;
+                padding: 15px 10px;
+            }
+            .tab-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 INTEGRALI DI FUNZIONI COMPOSTE</h1>
+            <p style="font-size: 1.2rem; margin-top: 10px;">Lezione Interattiva per Classe Quinta ITIS</p>
+            <p style="font-size: 0.9rem; margin-top: 5px; opacity: 0.9;">Tre metodi fondamentali per calcolare integrali complessi</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'tab1')">
+                💡 Funzioni Composte
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'tab2')">
+                📝 Integrazione per Sostituzione
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'tab3')">
+                🔄 Integrazione per Parti
+            </button>
+        </div>
+        
+        <!-- TAB 1: FUNZIONI COMPOSTE -->
+        <div id="tab1" class="tab-content active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">💡 INTEGRALI DI FUNZIONI COMPOSTE</h2>
+            
+            <div class="section">
+                <h3>🎯 Che cos'è una Funzione Composta?</h3>
+                <p>Una funzione composta è del tipo <strong>$f(g(x))$</strong>, dove una funzione è "dentro" l'altra.</p>
+                
+                <div class="formula-box">
+                    Funzione composta: $y = f(g(x))$
+                    <br><br>
+                    Esempi:<br>
+                    • $\sin(x^2)$ → $\sin$ è la funzione esterna, $x^2$ è quella interna<br>
+                    • $e^{3x+1}$ → $e^{(\cdot)}$ è esterna, $3x+1$ è interna<br>
+                    • $\ln(\cos x)$ → $\ln$ è esterna, $\cos x$ è interna
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🔍 Come Riconoscere una Funzione Composta</h3>
+                
+                <button class="toggle-button" onclick="toggleContent('riconoscere')">
+                    Mostra/Nascondi Guida
+                </button>
+                
+                <div id="riconoscere" class="hidden-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Funzione</th>
+                                <th>È composta?</th>
+                                <th>Funzione esterna</th>
+                                <th>Funzione interna</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>$\sin(3x)$</td>
+                                <td>✅ SI</td>
+                                <td>$\sin$</td>
+                                <td>$3x$</td>
+                            </tr>
+                            <tr>
+                                <td>$e^{x^2}$</td>
+                                <td>✅ SI</td>
+                                <td>$e^{(\cdot)}$</td>
+                                <td>$x^2$</td>
+                            </tr>
+                            <tr>
+                                <td>$\sqrt{x+1}$</td>
+                                <td>✅ SI</td>
+                                <td>$\sqrt{(\cdot)}$</td>
+                                <td>$x+1$</td>
+                            </tr>
+                            <tr>
+                                <td>$\ln(\sin x)$</td>
+                                <td>✅ SI</td>
+                                <td>$\ln$</td>
+                                <td>$\sin x$</td>
+                            </tr>
+                            <tr>
+                                <td>$x \cdot \sin x$</td>
+                                <td>❌ NO</td>
+                                <td colspan="2">È un prodotto, non una composizione</td>
+                            </tr>
+                            <tr>
+                                <td>$\sin x + \cos x$</td>
+                                <td>❌ NO</td>
+                                <td colspan="2">È una somma</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>📐 Derivata di una Funzione Composta (Ripasso)</h3>
+                
+                <button class="toggle-button" onclick="toggleContent('derivata-composta')">
+                    Mostra/Nascondi Regola della Catena
+                </button>
+                
+                <div id="derivata-composta" class="hidden-content">
+                    <p><strong>Regola della catena:</strong></p>
+                    <div class="formula-box">
+                        Se $y = f(g(x))$ allora:<br><br>
+                        $$\frac{dy}{dx} = f'(g(x)) \cdot g'(x)$$
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>Esempio: Derivare $\sin(x^2)$</h4>
+                        <p>$f(u) = \sin(u)$ con $u = g(x) = x^2$</p>
+                        <p>$f'(u) = \cos(u)$ e $g'(x) = 2x$</p>
+                        <p><strong>Quindi:</strong> $\frac{d}{dx}[\sin(x^2)] = \cos(x^2) \cdot 2x = 2x\cos(x^2)$</p>
+                    </div>
+                    
+                    <p style="margin-top: 20px;"><strong>Perché è importante?</strong> Perché l'integrale è l'operazione inversa della derivata!</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🧩 Il Problema degli Integrali di Funzioni Composte</h3>
+                
+                <p>Consideriamo questo integrale:</p>
+                <div class="formula-box">
+                    $$\int \sin(x^2) \, dx = \, ?$$
+                </div>
+                
+                <button class="toggle-button" onclick="toggleContent('problema')">
+                    Mostra/Nascondi Discussione
+                </button>
+                
+                <div id="problema" class="hidden-content">
+                    <p><strong>Domanda:</strong> Quale funzione ha come derivata $\sin(x^2)$?</p>
+                    
+                    <p style="color: red; margin: 15px 0;"><strong>Problema:</strong> Non esiste una funzione elementare la cui derivata sia esattamente $\sin(x^2)$!</p>
+                    
+                    <p><strong>MA...</strong> se l'integrale è del tipo:</p>
+                    <div class="formula-box">
+                        $$\int 2x \cdot \sin(x^2) \, dx$$
+                    </div>
+                    
+                    <p>Allora possiamo usare l'<strong>integrazione per sostituzione</strong> perché riconosciamo che:</p>
+                    <ul>
+                        <li>$2x$ è la derivata di $x^2$</li>
+                        <li>Questo corrisponde esattamente alla regola della catena "al contrario"!</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🛠️ Quale Metodo Usare?</h3>
+                
+                <div class="interactive-area">
+                    <h4>📊 ALBERO DECISIONALE</h4>
+                    
+                    <button class="toggle-button" onclick="toggleContent('albero')">
+                        Mostra/Nascondi Albero Decisionale
+                    </button>
+                    
+                    <div id="albero" class="hidden-content">
+                        <p><strong>Domanda 1:</strong> L'integranda è un <strong>prodotto</strong> di due funzioni diverse?</p>
+                        <ul>
+                            <li><strong>NO</strong> → Vai alla Domanda 2</li>
+                            <li><strong>SI</strong> → Vai alla Domanda 3</li>
+                        </ul>
+                        
+                        <hr style="margin: 15px 0;">
+                        
+                        <p><strong>Domanda 2:</strong> C'è una funzione composta $f(g(x))$?</p>
+                        <ul>
+                            <li><strong>SI</strong> e c'è $g'(x)$ moltiplicato → <span style="color: green; font-weight: bold;">USA SOSTITUZIONE</span></li>
+                            <li><strong>SI</strong> ma non c'è $g'(x)$ → Prova a riscrivere o usa altre tecniche</li>
+                            <li><strong>NO</strong> → Integrale immediato o scomposizione</li>
+                        </ul>
+                        
+                        <hr style="margin: 15px 0;">
+                        
+                        <p><strong>Domanda 3:</strong> Una delle due funzioni è difficile da integrare (es: $\ln x$, $\arctan x$)?</p>
+                        <ul>
+                            <li><strong>SI</strong> → <span style="color: blue; font-weight: bold;">USA INTEGRAZIONE PER PARTI</span></li>
+                            <li><strong>NO</strong> → Controlla se puoi usare sostituzione</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPI GUIDATI - Riconoscimento</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('esempi-riconoscimento')">
+                    Mostra/Nascondi Esempi
+                </button>
+                
+                <div id="esempi-riconoscimento" class="hidden-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Integrale</th>
+                                <th>Tipo</th>
+                                <th>Metodo Suggerito</th>
+                                <th>Perché?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>$\displaystyle \int 2x \sin(x^2) \, dx$</td>
+                                <td>Funzione composta + derivata</td>
+                                <td><strong>Sostituzione</strong></td>
+                                <td>C'è $\sin(x^2)$ e $2x = (x^2)'$</td>
+                            </tr>
+                            <tr>
+                                <td>$\displaystyle \int x \sin x \, dx$</td>
+                                <td>Prodotto semplice</td>
+                                <td><strong>Per parti</strong></td>
+                                <td>Non è una composizione, è $x \cdot \sin x$</td>
+                            </tr>
+                            <tr>
+                                <td>$\displaystyle \int \frac{\ln x}{x} \, dx$</td>
+                                <td>Funzione composta + derivata</td>
+                                <td><strong>Sostituzione</strong></td>
+                                <td>$\frac{1}{x} = (\ln x)'$</td>
+                            </tr>
+                            <tr>
+                                <td>$\displaystyle \int x \ln x \, dx$</td>
+                                <td>Prodotto con logaritmo</td>
+                                <td><strong>Per parti</strong></td>
+                                <td>$\ln x$ difficile da integrare</td>
+                            </tr>
+                            <tr>
+                                <td>$\displaystyle \int e^x \cos x \, dx$</td>
+                                <td>Prodotto di trascendenti</td>
+                                <td><strong>Per parti (2 volte)</strong></td>
+                                <td>Integrale ciclico</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>🎯 ESERCIZIO DI RICONOSCIMENTO</h4>
+                
+                <p>Per ciascun integrale, decidi quale metodo useresti e perché:</p>
+                
+                <div class="solution-space">
+                    <p><strong>1)</strong> $\displaystyle \int \cos x \cdot \sin^3 x \, dx$</p>
+                    <p><em>Metodo: ___________  Perché: ___________</em></p>
+                    <hr>
+                    <p><strong>2)</strong> $\displaystyle \int x \cdot e^{x^2} \, dx$</p>
+                    <p><em>Metodo: ___________  Perché: ___________</em></p>
+                    <hr>
+                    <p><strong>3)</strong> $\displaystyle \int x \cdot e^x \, dx$</p>
+                    <p><em>Metodo: ___________  Perché: ___________</em></p>
+                    <hr>
+                    <p><strong>4)</strong> $\displaystyle \int \arctan x \, dx$</p>
+                    <p><em>Metodo: ___________  Perché: ___________</em></p>
+                    <hr>
+                    <p><strong>5)</strong> $\displaystyle \int \frac{x}{\sqrt{x^2+1}} \, dx$</p>
+                    <p><em>Metodo: ___________  Perché: ___________</em></p>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <h4>💡 REGOLA D'ORO</h4>
+                <p><strong>Per integrare una funzione composta $f(g(x))$:</strong></p>
+                <ol>
+                    <li>Cerca la derivata $g'(x)$ nell'integrale</li>
+                    <li>Se c'è (o quasi) → <strong>Sostituzione</strong></li>
+                    <li>Se non c'è ma c'è un prodotto → <strong>Per parti</strong></li>
+                    <li>Se nessuno dei due funziona → Altre tecniche (fratti semplici, ecc.)</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- TAB 2: INTEGRAZIONE PER SOSTITUZIONE -->
+        <div id="tab2" class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📝 INTEGRAZIONE PER SOSTITUZIONE</h2>
+            
+            <div class="section">
+                <h3>🎯 L'Idea Fondamentale</h3>
+                <p>L'integrazione per sostituzione è come <strong>cambiare il punto di vista</strong> di un problema: trasformiamo un integrale complicato in uno più semplice cambiando variabile!</p>
+                
+                <button class="toggle-button" onclick="toggleContent('teoria-sost')">
+                    Mostra/Nascondi Teoria 📖
+                </button>
+                
+                <div id="teoria-sost" class="hidden-content">
+                    <h4>Formula Generale</h4>
+                    <div class="formula-box">
+                        $$\int f(g(x)) \cdot g'(x) \, dx = \int f(t) \, dt$$
+                        <br>
+                        dove: $t = g(x)$ → $dt = g'(x) \, dx$
+                    </div>
+                    
+                    <p><strong>In parole semplici:</strong></p>
+                    <ol>
+                        <li>Individuo una funzione "interna" $g(x)$ che complica l'integrale</li>
+                        <li>Pongo $t = g(x)$ (la sostituzione)</li>
+                        <li>Calcolo $dt = g'(x) \, dx$</li>
+                        <li>Sostituisco tutto nell'integrale originale</li>
+                        <li>Risolvo il nuovo integrale (più semplice!)</li>
+                        <li>Torno alla variabile originale $x$</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>📊 Quando Usare la Sostituzione?</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Situazione</th>
+                            <th>Sostituzione Suggerita</th>
+                            <th>Esempio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Funzione composta $f(g(x))$ con $g'(x)$ presente</td>
+                            <td>$t = g(x)$</td>
+                            <td>$\displaystyle \int 2x \sin(x^2) \, dx$ → $t = x^2$</td>
+                        </tr>
+                        <tr>
+                            <td>Radici $\sqrt{ax+b}$</td>
+                            <td>$t = ax+b$</td>
+                            <td>$\displaystyle \int x\sqrt{x+1} \, dx$ → $t = x+1$</td>
+                        </tr>
+                        <tr>
+                            <td>Esponenziali $e^{g(x)}$ con $g'(x)$</td>
+                            <td>$t = g(x)$</td>
+                            <td>$\displaystyle \int 2x e^{x^2} \, dx$ → $t = x^2$</td>
+                        </tr>
+                        <tr>
+                            <td>Logaritmi con derivata dell'argomento</td>
+                            <td>$t = \ln(x)$</td>
+                            <td>$\displaystyle \int \frac{\ln x}{x} \, dx$ → $t = \ln x$</td>
+                        </tr>
+                        <tr>
+                            <td>Funzioni trigonometriche composte</td>
+                            <td>$t = \sin(x)$ o $t = \cos(x)$</td>
+                            <td>$\displaystyle \int \sin x \cos x \, dx$ → $t = \sin x$</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPIO GUIDATO 1: Funzione Composta Classica</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('es1-sost')">
+                    Mostra/Nascondi Soluzione
+                </button>
+                
+                <p><strong>Calcola:</strong> $\displaystyle \int 2x \cos(x^2) \, dx$</p>
+                
+                <div id="es1-sost" class="hidden-content">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Identifico la funzione interna:</strong> $g(x) = x^2$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Pongo la sostituzione:</strong> $t = x^2$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Calcolo il differenziale:</strong> $dt = 2x \, dx$
+                        <br><em>Perfetto! Ho proprio $2x$ nell'integrale!</em>
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Sostituisco:</strong> $\displaystyle \int 2x \cos(x^2) \, dx = \int \cos(t) \, dt$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Integro:</strong> $\displaystyle \int \cos(t) \, dt = \sin(t) + C$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">6</span>
+                        <strong>Ritorno a $x$:</strong> $\sin(t) + C = \sin(x^2) + C$
+                    </div>
+                    
+                    <div class="formula-box">
+                        SOLUZIONE: $$\int 2x \cos(x^2) \, dx = \sin(x^2) + C$$
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPIO GUIDATO 2: Con Radice</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('es2-sost')">
+                    Mostra/Nascondi Soluzione
+                </button>
+                
+                <p><strong>Calcola:</strong> $\displaystyle \int \frac{\sin(\sqrt{x})}{\sqrt{x}} \, dx$</p>
+                
+                <div id="es2-sost" class="hidden-content">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Sostituzione:</strong> $t = \sqrt{x}$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Da $t = \sqrt{x}$ ricavo:</strong> $x = t^2$ → $dx = 2t \, dt$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Sostituisco:</strong> 
+                        $$\int \frac{\sin(\sqrt{x})}{\sqrt{x}} \, dx = \int \frac{\sin(t)}{t} \cdot 2t \, dt = \int 2\sin(t) \, dt$$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Integro:</strong> $\displaystyle \int 2\sin(t) \, dt = -2\cos(t) + C$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Ritorno a $x$:</strong> $-2\cos(t) + C = -2\cos(\sqrt{x}) + C$
+                    </div>
+                    
+                    <div class="formula-box">
+                        SOLUZIONE: $$\int \frac{\sin(\sqrt{x})}{\sqrt{x}} \, dx = -2\cos(\sqrt{x}) + C$$
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPIO GUIDATO 3: Con Logaritmo</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('es3-sost')">
+                    Mostra/Nascondi Soluzione
+                </button>
+                
+                <p><strong>Calcola:</strong> $\displaystyle \int \frac{\ln x}{x} \, dx$</p>
+                
+                <div id="es3-sost" class="hidden-content">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Sostituzione:</strong> $t = \ln x$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Differenziale:</strong> $dt = \frac{1}{x} \, dx$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Sostituisco:</strong> $\displaystyle \int \frac{\ln x}{x} \, dx = \int t \, dt$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Integro:</strong> $\displaystyle \int t \, dt = \frac{t^2}{2} + C$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Soluzione:</strong> $\displaystyle \frac{t^2}{2} + C = \frac{(\ln x)^2}{2} + C$
+                    </div>
+                    
+                    <div class="formula-box">
+                        SOLUZIONE: $$\int \frac{\ln x}{x} \, dx = \frac{(\ln x)^2}{2} + C$$
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPIO GUIDATO 4: Caso con Fattore Mancante</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('es4-sost')">
+                    Mostra/Nascondi Soluzione
+                </button>
+                
+                <p><strong>Calcola:</strong> $\displaystyle \int x \cos(x^2) \, dx$</p>
+                
+                <div id="es4-sost" class="hidden-content">
+                    <p><em>Nota: Qui manca il fattore 2 nella derivata di $x^2$!</em></p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Sostituzione:</strong> $t = x^2$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Differenziale:</strong> $dt = 2x \, dx$ → $x \, dx = \frac{1}{2} dt$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Sostituisco:</strong> 
+                        $$\int x \cos(x^2) \, dx = \int \cos(t) \cdot \frac{1}{2} \, dt = \frac{1}{2} \int \cos(t) \, dt$$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Integro:</strong> $\displaystyle \frac{1}{2} \int \cos(t) \, dt = \frac{1}{2} \sin(t) + C$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Soluzione:</strong> $\displaystyle \frac{1}{2} \sin(t) + C = \frac{1}{2} \sin(x^2) + C$
+                    </div>
+                    
+                    <div class="formula-box">
+                        SOLUZIONE: $$\int x \cos(x^2) \, dx = \frac{1}{2}\sin(x^2) + C$$
+                    </div>
+                </div>
+            </div>
+            
+            <div class="error-box">
+                <h4>⚠️ ERRORI COMUNI DA EVITARE!</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('errori-sost')">
+                    Mostra/Nascondi Errori
+                </button>
+                
+                <div id="errori-sost" class="hidden-content">
+                    <p><strong>❌ ERRORE 1:</strong> Dimenticare di calcolare $dt$ correttamente</p>
+                    <p style="color: red;">Sbagliato: $t = x^2$ → $dt = x \, dx$ (NO!)</p>
+                    <p style="color: green;">Giusto: $t = x^2$ → $dt = 2x \, dx$ (SI!)</p>
+                    
+                    <hr style="margin: 15px 0;">
+                    
+                    <p><strong>❌ ERRORE 2:</strong> Non trovare esattamente $g'(x) dx$ nell'integrale</p>
+                    <p>Se ho $\displaystyle \int x \cos(x^2) \, dx$ e pongo $t = x^2$, allora $dt = 2x \, dx$</p>
+                    <p style="color: red;">Sbagliato: sostituire direttamente (manca il fattore 2!)</p>
+                    <p style="color: green;">Giusto: $\displaystyle \int x \cos(x^2) \, dx = \frac{1}{2}\int 2x \cos(x^2) \, dx = \frac{1}{2}\int \cos(t) \, dt$</p>
+                    
+                    <hr style="margin: 15px 0;">
+                    
+                    <p><strong>❌ ERRORE 3:</strong> Dimenticare di tornare alla variabile $x$</p>
+                    <p style="color: red;">Sbagliato: lasciare la risposta come $\sin(t) + C$</p>
+                    <p style="color: green;">Giusto: $\sin(x^2) + C$ (sostituendo $t = x^2$)</p>
+                    
+                    <hr style="margin: 15px 0;">
+                    
+                    <p><strong>❌ ERRORE 4:</strong> Cambiare gli estremi negli integrali definiti</p>
+                    <p>Quando fai la sostituzione in un integrale definito, ricorda:</p>
+                    <div class="formula-box">
+                        $$\int_a^b f(g(x))g'(x) \, dx = \int_{g(a)}^{g(b)} f(t) \, dt$$
+                    </div>
+                    <p><strong>Devi cambiare anche gli estremi di integrazione!</strong></p>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>🎯 ESERCIZI GUIDATI</h4>
+                
+                <div class="solution-space">
+                    <p><strong>Esercizio 1:</strong> $\displaystyle \int 3x^2 e^{x^3} \, dx$</p>
+                    <p><em>Suggerimento: $t = x^3$</em></p>
+                    <hr>
+                    <p><strong>Esercizio 2:</strong> $\displaystyle \int \cos x \sin^3 x \, dx$</p>
+                    <p><em>Suggerimento: $t = \sin x$</em></p>
+                    <hr>
+                    <p><strong>Esercizio 3:</strong> $\displaystyle \int \frac{x}{\sqrt{x^2+1}} \, dx$</p>
+                    <p><em>Suggerimento: $t = x^2+1$</em></p>
+                    <hr>
+                    <p><strong>Esercizio 4:</strong> $\displaystyle \int \frac{2x+3}{x^2+3x+1} \, dx$</p>
+                    <p><em>Suggerimento: $t = x^2+3x+1$</em></p>
+                    <hr>
+                    <p><strong>Esercizio 5 (Sfida):</strong> $\displaystyle \int \frac{e^x}{e^x + 1} \, dx$</p>
+                    <p><em>Suggerimento: $t = e^x + 1$</em></p>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <h4>💡 STRATEGIA RAPIDA</h4>
+                <p><strong>Domande da farsi:</strong></p>
+                <ol>
+                    <li>C'è una funzione "interna" che si ripete?</li>
+                    <li>La sua derivata è presente nell'integrale (o a meno di una costante)?</li>
+                    <li>Se sostituisco, l'integrale diventa più semplice?</li>
+                </ol>
+                <p><strong>Se le risposte sono SI → USA LA SOSTITUZIONE!</strong></p>
+            </div>
+        </div>
+        
+        <!-- TAB 3: INTEGRAZIONE PER PARTI -->
+        <div id="tab3" class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔄 INTEGRAZIONE PER PARTI</h2>
+            
+            <div class="section">
+                <h3>🎯 L'Idea Fondamentale</h3>
+                <p>L'integrazione per parti è l'<strong>inverso della regola del prodotto</strong> per le derivate. È utile quando abbiamo il prodotto di due funzioni!</p>
+                
+                <button class="toggle-button" onclick="toggleContent('teoria-parti')">
+                    Mostra/Nascondi Teoria 📖
+                </button>
+                
+                <div id="teoria-parti" class="hidden-content">
+                    <h4>Formula Generale</h4>
+                    <div class="formula-box">
+                        $$\int f(x) \cdot g'(x) \, dx = f(x) \cdot g(x) - \int f'(x) \cdot g(x) \, dx$$
+                        <br><br>
+                        Oppure (notazione alternativa):<br><br>
+                        $$\int u \, dv = uv - \int v \, du$$
+                    </div>
+                    
+                    <p><strong>Come funziona:</strong></p>
+                    <ol>
+                        <li>Scelgo quale funzione sarà $f(x)$ (o $u$) e quale sarà $g'(x)$ (o $dv$)</li>
+                        <li>Calcolo $f'(x)$ (o $du$) e $g(x)$ (o $v$, integrando $dv$)</li>
+                        <li>Applico la formula</li>
+                        <li>Risolvo il nuovo integrale (che dovrebbe essere più semplice!)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🎓 La Regola LIATE (Come Scegliere $u$)</h3>
+                
+                <p>Per decidere quale funzione chiamare $u$ (quella da derivare) e quale $dv$ (quella da integrare), segui l'ordine <strong>LIATE</strong>:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Lettera</th>
+                            <th>Tipo di Funzione</th>
+                            <th>Priorità</th>
+                            <th>Esempio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>L</strong></td>
+                            <td>Logaritmica ($\ln x$, $\log x$)</td>
+                            <td>1° (massima)</td>
+                            <td>$\ln x$</td>
+                        </tr>
+                        <tr>
+                            <td><strong>I</strong></td>
+                            <td>Inversa trigonometrica ($\arcsin$, $\arctan$)</td>
+                            <td>2°</td>
+                            <td>$\arctan x$</td>
+                        </tr>
+                        <tr>
+                            <td><strong>A</strong></td>
+                            <td>Algebrica (polinomi, $x$, $x^2$...)</td>
+                            <td>3°</td>
+                            <td>$x^2$, $3x$</td>
+                        </tr>
+                        <tr>
+                            <td><strong>T</strong></td>
+                            <td>Trigonometrica ($\sin$, $\cos$, $\tan$)</td>
+                            <td>4°</td>
+                            <td>$\sin x$, $\cos x$</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E</strong></td>
+                            <td>Esponenziale ($e^x$, $a^x$)</td>
+                            <td>5° (minima)</td>
+                            <td>$e^x$, $2^x$</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="warning-box">
+                    <h4>💡 Come Usare LIATE</h4>
+                    <p><strong>La funzione che compare PRIMA in LIATE diventa $u$ (da derivare)</strong></p>
+                    <p><strong>L'altra diventa $dv$ (da integrare)</strong></p>
+                    <p><strong>Esempio:</strong> In $\displaystyle \int x \cdot e^x \, dx$</p>
+                    <ul>
+                        <li>$x$ è Algebrica (A)</li>
+                        <li>$e^x$ è Esponenziale (E)</li>
+                        <li>A viene prima di E in LIATE</li>
+                        <li>Quindi: $u = x$ e $dv = e^x \, dx$</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPIO GUIDATO 1: Polinomio × Esponenziale</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('es1-parti')">
+                    Mostra/Nascondi Soluzione
+                </button>
+                
+                <p><strong>Calcola:</strong> $\displaystyle \int x \cdot e^x \, dx$</p>
+                
+                <div id="es1-parti" class="hidden-content">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Applico LIATE:</strong> $x$ è (A)lgebrica, $e^x$ è (E)sponenziale
+                        <br>→ $u = x$, $dv = e^x \, dx$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Calcolo $du$ e $v$:</strong><br>
+                        $du = dx$<br>
+                        $v = \displaystyle \int e^x \, dx = e^x$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Applico la formula:</strong>
+                        $$\int x \cdot e^x \, dx = x \cdot e^x - \int e^x \, dx$$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Risolvo l'integrale rimasto:</strong>
+                        $$= x \cdot e^x - e^x + C$$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Semplifico:</strong>
+                        $$= e^x(x - 1) + C$$
+                    </div>
+                    
+                    <div class="formula-box">
+                        SOLUZIONE: $$\int x \cdot e^x \, dx = e^x(x - 1) + C$$
+                    </div>
+                    
+                    <div class="tip-box">
+                        <h4>✓ Verifica (derivando):</h4>
+                        <p>$$\frac{d}{dx}[e^x(x-1)] = e^x(x-1) + e^x \cdot 1 = e^x \cdot x - e^x + e^x = x \cdot e^x$$ ✓</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPIO GUIDATO 2: Logaritmo</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('es2-parti')">
+                    Mostra/Nascondi Soluzione
+                </button>
+                
+                <p><strong>Calcola:</strong> $\displaystyle \int \ln x \, dx$</p>
+                
+                <div id="es2-parti" class="hidden-content">
+                    <p><em>Nota: Qui abbiamo una sola funzione! Il trucco è vedere $\ln x$ come $(\ln x) \cdot 1$</em></p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Riscrivo:</strong> $\displaystyle \int \ln x \, dx = \int (\ln x) \cdot 1 \, dx$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Applico LIATE:</strong> $\ln x$ è (L)ogaritmica, $1$ è algebrica
+                        <br>→ $u = \ln x$, $dv = 1 \, dx$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Calcolo:</strong><br>
+                        $du = \frac{1}{x} \, dx$<br>
+                        $v = \displaystyle \int 1 \, dx = x$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Formula:</strong>
+                        $$\int \ln x \, dx = (\ln x) \cdot x - \int x \cdot \frac{1}{x} \, dx = x \ln x - \int 1 \, dx$$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">5</span>
+                        <strong>Soluzione:</strong>
+                        $$= x \ln x - x + C$$
+                    </div>
+                    
+                    <div class="formula-box">
+                        SOLUZIONE: $$\int \ln x \, dx = x \ln x - x + C = x(\ln x - 1) + C$$
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>✅ ESEMPIO GUIDATO 3: $x^2 \sin x$ (Doppia Integrazione)</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('es3-parti')">
+                    Mostra/Nascondi Soluzione
+                </button>
+                
+                <p><strong>Calcola:</strong> $\displaystyle \int x^2 \sin x \, dx$</p>
+                
+                <div id="es3-parti" class="hidden-content">
+                    <p><em>Attenzione: Questo richiede DUE integrazioni per parti!</em></p>
+                    
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <strong>Prima integrazione per parti:</strong><br>
+                        $u = x^2$, $dv = \sin x \, dx$<br>
+                        $du = 2x \, dx$, $v = -\cos x$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <strong>Applico:</strong>
+                        $$\int x^2 \sin x \, dx = -x^2 \cos x - \int (-\cos x) \cdot 2x \, dx$$
+                        $$= -x^2 \cos x + 2 \int x \cos x \, dx$$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <strong>Seconda integrazione per parti su $\displaystyle \int x \cos x \, dx$:</strong><br>
+                        $u = x$, $dv = \cos x \, dx$<br>
+                        $du = dx$, $v = \sin x$<br>
+                        $$\int x \cos x \, dx = x \sin x - \int \sin x \, dx = x \sin x + \cos x$$
+                    </div>
+                    
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <strong>Sostituisco:</strong>
+                        $$= -x^2 \cos x + 2(x \sin x + \cos x) + C$$
+                        $$= -x^2 \cos x + 2x \sin x + 2\cos x + C$$
+                    </div>
+                    
+                    <div class="formula-box">
+                        SOLUZIONE: $$\int x^2 \sin x \, dx = (2-x^2) \cos x + 2x \sin x + C$$
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚡ CASO SPECIALE: Integrali Ciclici</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('ciclici')">
+                    Mostra/Nascondi Spiegazione
+                </button>
+                
+                <div id="ciclici" class="hidden-content">
+                    <p>A volte, integrando per parti due volte, l'integrale originale ricompare! Esempio:</p>
+                    
+                    <p><strong>$\displaystyle \int e^x \sin x \, dx$</strong></p>
+                    
+                    <p>Dopo due integrazioni per parti otteniamo:</p>
+                    <div class="formula-box">
+                        $$\int e^x \sin x \, dx = e^x \sin x - e^x \cos x - \int e^x \sin x \, dx$$
+                    </div>
+                    
+                    <p><strong>Il trucco:</strong> Sposto l'integrale a sinistra!</p>
+                    <div class="formula-box">
+                        $$2 \int e^x \sin x \, dx = e^x \sin x - e^x \cos x$$
+                        $$\int e^x \sin x \, dx = \frac{e^x (\sin x - \cos x)}{2} + C$$
+                    </div>
+                </div>
+            </div>
+            
+            <div class="error-box">
+                <h4>⚠️ ERRORI COMUNI DA EVITARE!</h4>
+                
+                <button class="toggle-button" onclick="toggleContent('errori-parti')">
+                    Mostra/Nascondi Errori
+                </button>
+                
+                <div id="errori-parti" class="hidden-content">
+                    <p><strong>❌ ERRORE 1:</strong> Scegliere male $u$ e $dv$</p>
+                    <p style="color: red;">In $\displaystyle \int x \cdot e^x \, dx$ NON scegliere $u = e^x$ (complicherebbe!)</p>
+                    <p style="color: green;">Usa LIATE: $u = x$ (algebrica), $dv = e^x \, dx$</p>
+                    
+                    <hr style="margin: 15px 0;">
+                    
+                    <p><strong>❌ ERRORE 2:</strong> Sbagliare i segni nella formula</p>
+                    <p>La formula è: $\displaystyle \int u \, dv = uv$ <strong>$- \int v \, du$</strong> (MENO!)</p>
+                    
+                    <hr style="margin: 15px 0;">
+                    
+                    <p><strong>❌ ERRORE 3:</strong> Dimenticare la costante $+C$</p>
+                    <p>Ricorda sempre di aggiungere $+C$ agli integrali indefiniti!</p>
+                    
+                    <hr style="margin: 15px 0;">
+                    
+                    <p><strong>❌ ERRORE 4:</strong> Non verificare il risultato</p>
+                    <p>Deriva sempre il risultato per verificare che ottengi l'integranda originale!</p>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>🎯 ESERCIZI GUIDATI</h4>
+                
+                <div class="solution-space">
+                    <p><strong>Esercizio 1:</strong> $\displaystyle \int x \cos x \, dx$</p>
+                    <p><em>Suggerimento: $u = x$, $dv = \cos x \, dx$</em></p>
+                    <hr>
+                    <p><strong>Esercizio 2:</strong> $\displaystyle \int x^2 e^x \, dx$</p>
+                    <p><em>Suggerimento: due volte per parti!</em></p>
+                    <hr>
+                    <p><strong>Esercizio 3:</strong> $\displaystyle \int \arctan x \, dx$</p>
+                    <p><em>Suggerimento: riscrivi come $(\arctan x) \cdot 1$</em></p>
+                    <hr>
+                    <p><strong>Esercizio 4:</strong> $\displaystyle \int x \ln x \, dx$</p>
+                    <p><em>Suggerimento: $u = \ln x$ (LIATE!)</em></p>
+                    <hr>
+                    <p><strong>Esercizio 5 (Sfida):</strong> $\displaystyle \int e^x \cos x \, dx$</p>
+                    <p><em>Suggerimento: integrale ciclico!</em></p>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <h4>💡 STRATEGIA RAPIDA</h4>
+                <p><strong>Quando usare l'integrazione per parti?</strong></p>
+                <ol>
+                    <li>Quando hai il <strong>prodotto</strong> di due funzioni</li>
+                    <li>Quando una delle due funzioni è difficile da integrare (come $\ln x$)</li>
+                    <li>Quando la sostituzione non funziona</li>
+                    <li>Ricorda sempre: <strong>LIATE</strong> per scegliere $u$!</li>
+                </ol>
+            </div>
+            
+            <div class="section">
+                <h3>✅ CHECKLIST FINALE DI COMPRENSIONE</h3>
+                
+                <ul class="checklist">
+                    <li><input type="checkbox" onchange="updateProgress()"> So riconoscere una funzione composta $f(g(x))$</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> So quando usare l'integrazione per sostituzione</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> So calcolare $dt$ quando pongo $t = g(x)$</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> So quando usare l'integrazione per parti</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> Conosco la regola LIATE per scegliere $u$</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> So applicare la formula $\displaystyle \int u \, dv = uv - \int v \, du$</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> So distinguere quando usare sostituzione o per parti</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> So riconoscere gli integrali ciclici</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> Verifico sempre i risultati derivando</li>
+                    <li><input type="checkbox" onchange="updateProgress()"> Sono pronto per la verifica!</li>
+                </ul>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Funzione per cambiare tab
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabbuttons;
+            
+            // Nascondi tutti i contenuti
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            // Rimuovi classe active da tutti i bottoni
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+            
+            // Mostra il contenuto selezionato
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            // Ri-renderizza MathJax per il tab attivo
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise();
+            }
+        }
+        
+        // Funzione per mostrare/nascondere contenuti
+        function toggleContent(contentId) {
+            var content = document.getElementById(contentId);
+            content.classList.toggle("show");
+            
+            // Ri-renderizza MathJax quando si apre un contenuto
+            if (content.classList.contains("show") && typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise([content]);
+            }
+        }
+        
+        // Funzione per aggiornare la barra di progresso
+        function updateProgress() {
+            var checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+            var checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked');
+            var percentage = Math.round((checked.length / checkboxes.length) * 100);
+            
+            var progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+        
+        // Inizializza la barra di progresso
+        window.onload = function() {
+            updateProgress();
+        };
+    </script>
+</body>
+</html>
